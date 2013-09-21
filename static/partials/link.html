@@ -1,11 +1,11 @@
-<div class="categories span3">
+<div ng-init="cats = get_categories('link')" class="categories span3">
   <h2>Categories</h2>
   <ul class="unstyled">
     <li ng-repeat="cat in categories">
       <div class="type-select">
         <a ng-click="get_results(type, cat)" id="{{cat}}">{{cat}}</a>
       </div>
-      <br>
+    </li>
   </ul>
 </div>
 
@@ -13,8 +13,7 @@
   <ul class="unstyled">
     <li ng-repeat="result in results">
       <div class="results">
-        <div id="title">{{result.title}}</div>
-        <div id="content">{{result.content}}</div>
+        <a href="{{result.content}}" target="_blank">{{result.title}}</a>
       </div>
     </li>
   </ul>

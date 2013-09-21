@@ -11,8 +11,20 @@
     <script type="text/javascript" src="static/js/client.js"></script>
   </head>
   <body>
-    <div class="content container centered">
-      <div ng-view></div>
+    <div class="row centered">
+      <nav class="nav {{active}}" ng-click="$event.preventDefault()">
+        <a href="#/note" class="note" ng-click="active='note'">Note</a>
+        <a href="#/link" class="link" ng-click="active='link'">Link</a>
+        <a href="#/image" class="image" ng-click="active='image'">Image</a>
+        <div class="pull-right">
+          <input ng-model="searchText"
+                  ng-change="globalSearch(searchText)" 
+                  type="text"
+                  placeholder="search"
+                  id="searchForm" />
+        </div>
+      </nav>
     </div>
+    <div ng-view></div>
   </body>
 </html>

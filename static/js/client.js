@@ -1,27 +1,31 @@
 'use strict'
 
 var client = angular.module('client', []).
-  config(function($routeProvider) {
+  config(function($routeProvider, $httpProvider) {
+    // allow cross domain since front and backend may be split up
+    $httpProvider.defaults.useXDomain = true
+    delete $httpProvider.defaults.headers.common['X-Requested-With']
+    // routes
     $routeProvider.
-      when('/', { templateUrl: 'static/partials/main.html'
-                , controller: ClientCtrl })
+      when(
+        '/note',
+        { templateUrl: 'static/partials/note.html'
+        , controller: NoteCtrl }).
+      when(
+        '/link',
+        { templateUrl: 'static/partials/link.html'
+        , controller: LinkCtrl }).
+      otherwise({redirectTo: "/"});
   });
 
-client.config([$httpProvider, function($httpProvider) {
-  $httpProvider.defaults.useXDomain = true
-  delete $httpProvider.defaults.headers.common['X-Requested-With']
-}])
+// YOUR HINK BACKEND'S URL
+var url = 'http://10.21.14.40:8080/'
 
-function ClientCtrl($scope, $http) {
+function NoteCtrl($scope, $http) {
   // functionality for client controller to hink backend
-  var url = 'http://127.0.0.1:3000/'
   // initialize type list
-  $scope.init_types = function() {
-    $http.get(url).success(function(docs) {
-      $scope.types = docs
-    })
-  }
   //getters (probably a better way to do these or avoid these)
+  var type = 'note'
   $scope.get_categories= function(type) {
     $http.get(url + type).success(function(docs) {
       $scope.type = type
@@ -44,3 +48,20 @@ function ClientCtrl($scope, $http) {
   }
 
 }
+function LinkCtrl($scope, $http) {
+  var type = 'link'
+  $scope.get_categories= function(type) {
+    $http.get(url + type).success(function(docs) {
+      $scope.type = type
+      $scope.categories = docs
+    })
+  }
+  $scope.get_results = function(type, cat) {
+    $http.get(url + type + '/' + cat).success(function(docs) {
+      $scope.type = type
+      $scope.cat = cat
+      $scope.results = docs
+    })
+  }
+}
+
